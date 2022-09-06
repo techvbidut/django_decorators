@@ -65,8 +65,46 @@ def create_wish(x):
   
 wish = create_wish("phone")
   
-print (wish("laptop"))
+print (wish("laptop")) # returns: ('phone', 'laptop')
 ```
 
+## Let us create a decorator!
 
+```
+def your_decorator(func):
+    def inner(*args, **kwargs):
+        print("Before execution of wrapped function")
+        # executed wrapped function
+        result = func(*args, **kwargs) 
+        print("After execution of wrapped function")
+  
+        return result
+         
+    return inner
+ 
+ 
+# The wrapped function
+def your_function():
+    print("Inside the function")
+    
+your_function = your_decorator(your_function) # assigning decorator
+your_function() # executing function
+```
+
+Let us try to understand the code written above.
+1. The wrapped function here is `your_function()`
+2. Decorater here is `your_decorater()` which takes a function as an argument.
+3. This decorater has a inner funtion which taked any argument.
+4. We execute the passed function `func` inside this `inner` function.
+5. Before executing this `func` we print 'before execution' message, alternatively, you can manipulate the data or add your logic here.
+6. We stored the `func` return value in `result` variable, which is eventually returned after the 'after execution' message.
+7. Atlast, inner function is returned from the decorater.
+8. The second last line, assigns the decorater to your function.
+9. The last line executes or calls the function.
+10. The result looks like:
+```
+Before execution of wrapped function
+Inside the function
+After execution of wrapped function
+```
 
