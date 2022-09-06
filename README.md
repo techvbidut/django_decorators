@@ -113,7 +113,7 @@ Inside the function
 After execution of wrapped function
 ```
 
-#### Note: Instead of assigns the decorater to your function like `your_function = your_decorator(your_function)`, you can simply write `@your_decorator` above your function definition.
+#### Note: Instead of assigning the decorater to your function like `your_function = your_decorator(your_function)`, you can simply write `@your_decorator` above your function definition.
 
 ### Understanding decoraters with practical example in django.
 1. For debugging purpose, let us suppose we want to log some information like the number of queries or the execution time taken by every API view.
@@ -160,3 +160,19 @@ def query_debug(func):
 4. `len(connection.queries)` will give the number of queries executed.
 5. `time.perf_counter()` returns the value (in fractional seconds) of a performance counter, i.e. a clock with the highest available resolution to measure a short duration. 
 6. `__name__` is a built-in variable which evaluates to the name of the current module. (wrapped function's name in our case)
+
+### Using this custom query debug decorator
+
+```
+@query_debug    
+def your_function(self, request, *args, **kwargs):
+    #your logic
+    pass
+```
+
+<i>Your log will look something like this (depends on your function)</i>
+```
+>>> QUERY DEBUG DECORATOR - Function : your_function
+>>> QUERY DEBUG DECORATOR - Number of Queries : 10
+>>> QUERY DEBUG DECORATOR - Finished in : 1.81s
+```
