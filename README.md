@@ -176,3 +176,36 @@ def your_function(self, request, *args, **kwargs):
 >>> QUERY DEBUG DECORATOR - Number of Queries : 10
 >>> QUERY DEBUG DECORATOR - Finished in : 1.81s
 ```
+
+## Chaining decorators
+<i>Using multiple decorators for a function</i>
+
+```
+def decor_outer(func):
+	def inner():
+		k = func()
+		return k * k
+	return inner
+
+def decor_inner(func):
+	def inner():
+		k = func()
+		return 3 * k
+	return inner
+
+@decor_outer
+@decor_inner
+def number():
+	return 10
+
+print(number()) # prints 900
+```
+
+<i>Let us understand the code above:</i>
+
+1. First inner decorator multiplies 3 with 10 which gives 30.
+2. The outer decorator gives square of the previous result i.e 30 * 30 = 900.
+3. Therefore, we get the final result as 900.
+4. I hope you got the order of execution of decorators.
+
+
