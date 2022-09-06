@@ -208,4 +208,4 @@ print(number()) # prints 900
 3. Therefore, we get the final result as 900.
 4. I hope you got the order of execution of decorators.
 
-
+`To be added: from functools import wraps`
