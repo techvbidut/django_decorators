@@ -1,4 +1,4 @@
-# DJANGO DECORATORS
+# DECORATORS
 
 ## What is a decorator in python?
 It is a design pattern, which allows us to modify behaviour of a function or class.
