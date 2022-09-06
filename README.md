@@ -73,25 +73,30 @@ print (wish("laptop")) # returns: ('phone', 'laptop')
 ```
 def your_decorator(func):
     def inner(*args, **kwargs):
+    
         print("Before execution of wrapped function")
+        
         # executed wrapped function
         result = func(*args, **kwargs) 
+        
         print("After execution of wrapped function")
-  
+        
         return result
          
     return inner
- 
  
 # The wrapped function
 def your_function():
     print("Inside the function")
     
-your_function = your_decorator(your_function) # assigning decorator
-your_function() # executing function
+# assigning decorator
+your_function = your_decorator(your_function) 
+
+# executing function
+your_function() 
 ```
 
-Let us try to understand the code written above.
+### Let us try to understand the code written above.
 1. The wrapped function here is `your_function()`
 2. Decorater here is `your_decorater()` which takes a function as an argument.
 3. This decorater has a inner funtion which taked any argument.
@@ -108,3 +113,50 @@ Inside the function
 After execution of wrapped function
 ```
 
+#### Note: Instead of assigns the decorater to your function like `your_function = your_decorator(your_function)`, you can simply write `@your_decorator` above your function definition.
+
+### Understanding decoraters with practical example in django.
+1. For debugging purpose, let us suppose we want to log some information like the number of queries or the execution time taken by every API view.
+2. The best approach for implementing this will be making a custom decorator. 
+3. Django provides us built in decorators as well, which we will not discuss in this tutorial. As understanding custom decorator is much important for a developer.
+4. Let us now make a custom query debug decorator.
+
+```
+import time
+import logging
+from django.db import connection, reset_queries
+
+log = logging.getLogger("django")
+
+#making custom query debug decorator
+def query_debug(func):
+
+    def inner(*args, **kwargs):
+    
+        reset_queries()
+        start_queries = len(connection.queries)
+        start_time = time.perf_counter()
+
+        result = func(*args, **kwargs)
+
+        end_time = time.perf_counter()
+        end_queries = len(connection.queries)
+
+        queries = end_queries - start_queries
+        time_taken = end_time - start_time
+
+        log.info(f">>> QUERY DEBUG DECORATOR - Function : {func.__name__}")
+        log.info(f">>> QUERY DEBUG DECORATOR - Number of Queries : {queries}")
+        log.info(f">>> QUERY DEBUG DECORATOR - Finished in : {(time_taken):.2f}s")
+        
+        return result
+    return inner
+```
+
+### Let us understand the code written above
+1. The code above is simply a custom decorator. If you understood decorators in general then it will be easy for you  to understand the code above.
+2. `reset_queries()` basically clears the query list manually.
+3. `connection.queries` is a list of dictionaries in order of query execution. It contains `sql` (raw SQL statement) and `time` (execution time in seconds).
+4. `len(connection.queries)` will give the number of queries executed.
+5. `time.perf_counter()` returns the value (in fractional seconds) of a performance counter, i.e. a clock with the highest available resolution to measure a short duration. 
+6. `__name__` is a built-in variable which evaluates to the name of the current module. (wrapped function's name in our case)
